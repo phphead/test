@@ -1,6 +1,7 @@
 <?php namespace Rj;
 
-use Phalcon\Di, Phalcon\Logger\Adapter\File as Logger_File;
+use Phalcon\Di,
+	Phalcon\Logger\Adapter\File as Logger_File;
 
 /**
  * Class Logger
@@ -21,8 +22,8 @@ class Logger {
 		$serviceName = 'logger_' . strtolower($name);
 		$di          = DI::getDefault();
 
-		if ($logger = $di->getShared($serviceName)) {
-			return $logger;
+		if ($di->has($serviceName)) {
+			return $di->getShared($serviceName);
 
 		} else {
 			if ( ! $logFileName = Config::instance()->$serviceName) {
