@@ -1,0 +1,16 @@
+{
+    "name": "test/helper",
+    "authors": [
+        {
+            "name": "rj28",
+            "email": "rj28@ya.ru"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.9"
+    },
+    "type": "library",
+    "autoload": {
+        "classmap": ["."]
+    }
+}
