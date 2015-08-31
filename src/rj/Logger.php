@@ -2,6 +2,13 @@
 
 use Phalcon\Di, Phalcon\Logger\Adapter\File as Logger_File;
 
+/**
+ * Class Logger
+ *
+ * @method Logger_File messages() static
+ *
+ * @package Rj]
+ */
 class Logger {
 
 	/** @return Logger_File */
