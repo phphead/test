@@ -31,7 +31,7 @@ class Helper {
 			$message = date('Y-m-d H:i:s') . ' ' . get_class($e) . ': ' . $e->getMessage() . "\n"
 				. 'UserAgent: ' . $request->getUserAgent() . "\n"
 				. 'HTTP Referer: ' . urldecode($request->getHTTPReferer()) . "\n"
-				. $request->getClientAddress() . " URL: " . $request->getScheme() . '://' . $request->getHost() . urldecode($requestUri) . "; Logged user: " . (User::getLoggedUser() ? User::getLoggedUser()->username : 'none') . "\n"
+				. $request->getClientAddress() . " URL: " . $request->getScheme() . '://' . $request->getHttpHost() . urldecode($requestUri) . "\n"
 				. $e->getTraceAsString() . "\n";
 
 		} else {
