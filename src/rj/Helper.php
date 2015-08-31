@@ -1,4 +1,4 @@
-<?php namespace MyHelper;
+<?php namespace Rj;
 
 class Helper {
 
