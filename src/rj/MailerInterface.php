@@ -1,6 +1,6 @@
 <?php namespace Rj;
 
-class MailerInterface {
+interface MailerInterface {
 
 	public static function push2admin($subject, $text);
 
