@@ -3,7 +3,7 @@
 class Config {
 
 	/** @return \Config */
-	public function instance() {
+	public static function instance() {
 		return \Phalcon\DI::getDefault()->getShared('config');
 	}
 
