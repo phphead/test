@@ -12,6 +12,11 @@ use Phalcon\Di, Phalcon\Logger\Adapter\File as Logger_File;
 class Logger {
 
 	/** @return Logger_File */
+	public static function __callStatic($name) {
+		return static::instance($name);
+	}
+
+	/** @return Logger_File */
 	public static function instance($name) {
 		$serviceName = 'logger_' . strtolower($name);
 		$di          = DI::getDefault();
