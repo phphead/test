@@ -12,7 +12,7 @@ use Phalcon\Di, Phalcon\Logger\Adapter\File as Logger_File;
 class Logger {
 
 	/** @return Logger_File */
-	public static function __callStatic($name) {
+	public static function __callStatic($name, $args) {
 		return static::instance($name);
 	}
 
