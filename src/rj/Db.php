@@ -1,6 +1,7 @@
 <?php namespace Rj;
 
-use Phalcon\Db\Adapter\Pdo\Mysql as Mysql_Adapter;
+use Exception,
+	Phalcon\Db\Adapter\Pdo\Mysql as Mysql_Adapter;
 
 class Db
 {
