@@ -386,15 +386,15 @@ class WhoIs_DomainSearchResult {
 			@ list($a, $b) = explode(':', $row);
 
 			switch (true) {
-				case 'created:' === $a:
+				case 'created' === $a:
 					$this->created = trim($b);
 					break;
 
-				case 'paid-till:' === $a:
+				case 'paid-till' === $a:
 					$this->paidTill = trim($b);
 					break;
 
-				case 'free-date:' === $a:
+				case 'free-date' === $a:
 					$this->freeDate = trim($b);
 					break;
 			}
