@@ -265,6 +265,7 @@ class WhoIs {
 		// ye - Yemen - no whois server assigned
 		"yt" => "whois.nic.yt", // Mayotte
 		"yu" => "whois.ripe.net",
+		"space" => "whois.nic.space",
 	];
 
 	/** @return WhoIs_DomainSearchResult */
@@ -385,16 +386,21 @@ class WhoIs_DomainSearchResult {
 		foreach ($input as $row) {
 			@ list($a, $b) = explode(':', $row);
 
+			$a = strtolower(trim($a));
+			$b = strtolower(trim($b));
+
 			switch (true) {
 				case 'created' === $a:
-					$this->created = trim($b);
+				case 'creation date' === $a:
+					$this->created = $b;
 					break;
 
 				case 'paid-till' === $a:
-					$this->paidTill = trim($b);
+				case 'registry expiry date' === $a:
+					$this->paidTill = $b;
 					break;
 
-				case 'free-date' === $a:
+				case 'free-date' === strtolower(trim($a)):
 					$this->freeDate = trim($b);
 					break;
 			}
