@@ -46,13 +46,7 @@ class EngineSmarty extends Engine implements EngineInterface
 
     protected $_params;
 
-    /**
-     * Phalcon\Mvc\View\Engine\Twig constructor
-     *
-     * @param \Phalcon\Mvc\ViewInterface $view
-     * @param \Phalcon\DiInterface $di
-     */
-    public function __construct($view,  $di=null)
+    public function __construct(\Phalcon\Mvc\ViewBaseInterface $view, \Phalcon\DiInterface $dependencyInjector = NULL)
     {
         $this->_smarty = static::getSmarty();
         //$this->_smarty->config_dir = SMARTY_DIR . 'configs';
