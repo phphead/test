@@ -384,7 +384,7 @@ class WhoIs_DomainSearchResult {
 		$this->whoisserver = $whoisserver;
 
 		foreach ($input as $row) {
-			@ list($a, $b) = explode(':', $row);
+			@ list($a, $b) = explode(':', $row, 1);
 
 			$a = strtolower(trim($a));
 			$b = strtolower(trim($b));
