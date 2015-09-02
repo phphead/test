@@ -384,10 +384,14 @@ class WhoIs_DomainSearchResult {
 		$this->whoisserver = $whoisserver;
 
 		foreach ($input as $row) {
-			@ list($a, $b) = explode(':', $row, 1);
+			@ list($a, $b) = explode(':', $row, 2);
 
 			$a = strtolower(trim($a));
 			$b = strtolower(trim($b));
+
+			if (preg_match('/^(\d{4}).(\d{2}).(\d{2})/iD', $b, $pock)) {
+				$b = $pock[1] . '-' . $pock[2] . '-' . $pock[3];
+			}
 
 			switch (true) {
 				case 'created' === $a:
@@ -407,6 +411,11 @@ class WhoIs_DomainSearchResult {
 
 			$this->_result .= $row . "\n";
 		}
+	}
+
+
+	public function isValid() {
+		return $this->domain && $this->created && $this->paidTill && $this->freeDate;
 	}
 
 }
