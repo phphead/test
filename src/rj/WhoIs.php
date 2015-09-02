@@ -372,15 +372,18 @@ class WhoIs {
 
 class WhoIs_DomainSearchResult {
 
-	public $domain, $created, $paidTill, $freeDate;
+	public $domain, $created, $paidTill, $freeDate, $whoisserver;
 
 	protected $_result = '';
 
 	public function __toString() {
-		return $this->_result;
+		return "{$this->domain} domain lookup results from {$this->whoisserver} server:\n\n" . $this->_result;
 	}
 
-	public function __construct(array $input) {
+	public function __construct($domain, $whoisserver, array $input) {
+		$this->domain      = $domain;
+		$this->whoisserver = $whoisserver;
+
 		foreach ($input as $row) {
 			@ list($a, $b) = explode(':', $row);
 
