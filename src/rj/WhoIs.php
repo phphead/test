@@ -400,12 +400,16 @@ class WhoIs_DomainSearchResult {
 					break;
 
 				case 'paid-till' === $a:
-				case 'registry expiry date' === $a:
 					$this->paidTill = $b;
 					break;
 
-				case 'free-date' === strtolower(trim($a)):
-					$this->freeDate = trim($b);
+				case 'registry expiry date' === $a:
+					$this->paidTill = $b;
+					$this->freeDate = $b;
+					break;
+
+				case 'free-date' === $a:
+					$this->freeDate = $b;
 					break;
 			}
 
