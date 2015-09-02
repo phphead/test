@@ -308,18 +308,18 @@ class WhoIs {
 		}
 		fclose($fp);
 
-		$res = "";
+		$res = [];
 		if((strpos(strtolower($out), "error") === FALSE) && (strpos(strtolower($out), "not allocated") === FALSE)) {
 			$rows = explode("\n", $out);
 			foreach($rows as $row) {
 				$row = trim($row);
 				if(($row != '') && ($row{0} != '#') && ($row{0} != '%')) {
-					$res .= $row."\n";
+					$res[] = $row;
 				}
 			}
 		}
 
-		return $res;
+		return new WhoIs_DomainSearchResult($res);
 	}
 
 	public static function LookupIP($ip) {
@@ -366,4 +366,38 @@ class WhoIs {
 		return $domain;
 	}
 
+}
+
+class WhoIs_DomainSearchResult {
+
+	public $domain, $created, $paidTill, $freeDate;
+
+	protected $_result = '';
+
+	public function __toString() {
+		return $this->_result;
+	}
+
+	public function __construct(array $input) {
+		foreach ($input as $row) {
+			@ list($a, $b) = explode(':', $row);
+
+			switch (true) {
+				case 'created:' === $a:
+					$this->created = trim($b);
+					break;
+
+				case 'paid-till:' === $a:
+					$this->paidTill = trim($b);
+					break;
+
+				case 'free-date:' === $a:
+					$this->freeDate = trim($b);
+					break;
+			}
+
+			$this->_result .= $row . "\n";
+		}
+	}
+	
 }
