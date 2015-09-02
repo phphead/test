@@ -276,21 +276,19 @@ class WhoIs {
 			throw new WhoIs_Exception("Error: No appropriate Whois server found for $domain domain!");
 		}
 
-		$result = static::queryWhoisServer($whoisserver, $domain);
-		if( ! $result) {
-			throw new WhoIs_Exception("Error: No results retrieved from $whoisserver server for $domain domain!");
-
-		} else {
-			while (strpos($result, "Whois Server:") !== false){
+		if ($result = static::queryWhoisServer($whoisserver, $domain)) {
+			while (strpos($result, "Whois Server:") !== false) {
 				preg_match("/Whois Server: (.*)/", $result, $matches);
-				$secondary = $matches[1];
-				if($secondary) {
+				if ($secondary = $matches[1]) {
 					$result = static::queryWhoisServer($secondary, $domain);
-					$whoisserver = $secondary;
 				}
 			}
+
+		} else {
+			throw new WhoIs_Exception("Error: No results retrieved from $whoisserver server for $domain domain!");
 		}
-		return "$domain domain lookup results from $whoisserver server:\n\n" . $result;
+
+		return $result;
 	}
 
 	/** @return WhoIs_DomainSearchResult */
