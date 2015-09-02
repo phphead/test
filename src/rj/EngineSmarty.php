@@ -53,7 +53,7 @@ class EngineSmarty extends Engine implements EngineInterface
         //$this->_smarty->cache_dir = SMARTY_DIR . 'cache';
         //$this->_smarty->caching = false;
         //$this->_smarty->debugging = true;
-        parent::__construct($view, $di);
+        parent::__construct($view, $dependencyInjector);
     }
 
     /**
