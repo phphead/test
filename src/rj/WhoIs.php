@@ -319,7 +319,7 @@ class WhoIs {
 			}
 		}
 
-		return new WhoIs_DomainSearchResult($res);
+		return new WhoIs_DomainSearchResult($domain, $whoisserver, $res);
 	}
 
 	public static function LookupIP($ip) {
