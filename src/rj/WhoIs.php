@@ -267,6 +267,7 @@ class WhoIs {
 		"yu" => "whois.ripe.net",
 	];
 
+	/** @return WhoIs_DomainSearchResult */
 	public static function lookupDomain($domain){
 		$domain_parts = explode(".", $domain);
 		$tld = strtolower(array_pop($domain_parts));
@@ -292,6 +293,7 @@ class WhoIs {
 		return "$domain domain lookup results from $whoisserver server:\n\n" . $result;
 	}
 
+	/** @return WhoIs_DomainSearchResult */
 	public static function queryWhoisServer($whoisserver, $domain) {
 		$port    = 43;
 		$timeout = 10;
@@ -399,5 +401,5 @@ class WhoIs_DomainSearchResult {
 			$this->_result .= $row . "\n";
 		}
 	}
-	
+
 }
