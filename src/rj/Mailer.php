@@ -2,6 +2,11 @@
 
 class Mailer
 {
+	/** @return Mailer */
+	public static function factory() {
+		return \Phalcon\DI::getDefault()->getShared('mailer');
+	}
+
     protected static function _encode($value)
     {
         return '=?utf-8?b?' . base64_encode($value) . '?=';
