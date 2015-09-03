@@ -15,4 +15,10 @@ class Controller extends \Phalcon\Mvc\Controller {
 		}
 	}
 
+	public function assertTrue($assertion, $message = 'Bad request') {
+		if ( ! $assertion) {
+			throw new Exception($message);
+		}
+	}
+
 }
