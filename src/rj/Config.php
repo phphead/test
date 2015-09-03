@@ -11,7 +11,7 @@ class Config {
 	/** @var int */
 	public $error_reporting;
 
-	public $smpt_hostname, $mailer_sender_email;
+	public $smtp_hostname, $mailer_sender_email;
 
 	/** @var string */
 	public $mailer;
