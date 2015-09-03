@@ -13,6 +13,9 @@ class Config {
 
 	public $smpt_hostname, $mailer_sender_email;
 
+	/** @var string */
+	public $mailer;
+
 	/** @return \Config */
 	public static function instance() {
 		return \Phalcon\DI::getDefault()->getShared('config');

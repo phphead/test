@@ -4,7 +4,7 @@ class Mailer
 {
 	/** @return Mailer */
 	public static function factory() {
-		return \Phalcon\DI::getDefault()->getShared('mailer');
+		return \Phalcon\DI::getDefault()->getShared('Mailer');
 	}
 
     protected static function _encode($value)
