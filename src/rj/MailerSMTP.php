@@ -40,7 +40,7 @@ class MailerSMTP extends Mailer
             };
 
             $hear(220);
-            $say('HELO ' . $config->smpt_hostname, 250);
+            $say('HELO ' . $config->smtp_hostname, 250);
             $say('MAIL FROM: ' . $config->mailer_sender_email, 250);
             $say('RCPT TO: ' . $to, 250);
             $say('DATA', 354);
