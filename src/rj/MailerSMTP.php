@@ -17,7 +17,7 @@ class MailerSMTP extends Mailer
         }
 
         $config = Config::instance();
-        if ($conn = fsockopen($config->smpt_hostname, 25, $errno, $errstr, 2)) {
+        if ($conn = fsockopen($config->smtp_hostname, 25, $errno, $errstr, 2)) {
 
             $hear = function($code) use ( & $conn) {
                 $str = fgets($conn, 100);
