@@ -389,8 +389,11 @@ class WhoIs_DomainSearchResult {
 			$a = strtolower(trim($a));
 			$b = strtolower(trim($b));
 
-			if (preg_match('/^(\d{4}).(\d{2}).(\d{2})/iD', $b, $pock)) {
+			if (preg_match('/^(\d{4}).(\d{2}|\w+).(\d{2})/iD', $b, $pock)) {
 				$b = $pock[1] . '-' . $pock[2] . '-' . $pock[3];
+
+			} else if ($time = strtotime($b)) {
+				$b = date('Y-m-d', $time);
 			}
 
 			switch (true) {
@@ -403,6 +406,7 @@ class WhoIs_DomainSearchResult {
 					$this->paidTill = $b;
 					break;
 
+				case 'domain expiration date' === $a:
 				case 'registry expiry date' === $a:
 					$this->paidTill = $b;
 					$this->freeDate = $b;
