@@ -1,10 +1,10 @@
 <?php namespace Rj;
 
-use Exception;
+use Exception, Phalcon\Mvc\Model;
 
 class Assert {
 
-	public static function noMessages(Phalcon\Mvc\Model $model) {
+	public static function noMessages(Model $model) {
 		$ret = '';
 		if ($messages = $model->getMessages())
 			foreach ($model->getMessages() as $message) {
