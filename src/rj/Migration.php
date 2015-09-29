@@ -66,7 +66,7 @@ class Migration {
 		}
 
 		$fileName = static::_getNewMigrationFileName();
-		file_put_contents(static::_dir() . $fileName, "<?php\n\n\$this->db->execute(\"\n\t" . str_replace("\n", "\n\t", $migration) . "\n\");");
+		file_put_contents(static::_dir() . $fileName, "<?php\n\n\$db->execute(\"\n\t" . str_replace("\n", "\n\t", $migration) . "\n\");");
 
 		echo $migration . "\n";
 		echo "Created file $fileName\n";
