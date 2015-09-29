@@ -1,7 +1,8 @@
 <?php namespace Rj;
 
 use Rj\Migration\Table,
-	Exception;
+	Exception,
+	Phalcon\DI;
 
 class Migration {
 
@@ -77,6 +78,8 @@ class Migration {
 	public static function run() {
 		list ($td, $mg) = static::_readMeta();
 		$dir = static::_dir();
+
+		$db = DI::getDefault()->getShared('db');
 
 		if ($handle = opendir($dir)) {
 			while (false !== ($entry = readdir($handle))) {
