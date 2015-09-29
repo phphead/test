@@ -34,7 +34,7 @@ class Migration {
 		static::_writeMeta(Table::getList(), $mg);
 	}
 
-	public function gen() {
+	public static function gen() {
 		list ($old, $mg) = static::_readMeta();
 
 		if ( ! is_array($old))
@@ -64,14 +64,14 @@ class Migration {
 			return;
 		}
 
-		$fileName = $this->_getNewMigrationFileName();
+		$fileName = static::_getNewMigrationFileName();
 		file_put_contents(static::_dir() . $fileName, "<?php\n\n\$this->db->execute(\"\n\t" . str_replace("\n", "\n\t", $migration) . "\n\");");
 
 		echo $migration . "\n";
 		echo "Created file $fileName\n";
 
 		$mg[] = $fileName;
-		$this->_writeMeta($new, $mg);
+		static::_writeMeta($new, $mg);
 	}
 
 	public static function run() {
