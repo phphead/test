@@ -11,7 +11,7 @@ class TestView124
 
     public function setVar($k, $v)
     {
-        EngineSmarty::getSmarty()->assign($k, $v);
+        EngineSmarty124::getSmarty()->assign($k, $v);
     }
 
     public function setVars($vars)
