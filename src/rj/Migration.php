@@ -6,6 +6,15 @@ use Rj\Migration\Table,
 
 class Migration {
 
+	public static function test() {
+		if (file_exists(self::_getTableDataFileName())) {
+			Assert::true(is_writeable(self::_getTableDataFileName()));
+
+		} else {
+			Assert::true(is_writeable(dirname(self::_getTableDataFileName())));
+		}
+	}
+
 	protected static function _dir() {
 		return DOCROOT . 'migrations/';
 	}
@@ -31,11 +40,15 @@ class Migration {
 	}
 
 	public static function dump() {
+		self::test();
+
 		list ($td, $mg) = static::_readMeta();
 		static::_writeMeta(Table::getList(), $mg);
 	}
 
 	public static function gen() {
+		self::test();
+
 		list ($old, $mg) = static::_readMeta();
 
 		if ( ! is_array($old))
@@ -76,6 +89,8 @@ class Migration {
 	}
 
 	public static function run() {
+		self::test();
+
 		list ($td, $mg) = static::_readMeta();
 		$dir = static::_dir();
 
