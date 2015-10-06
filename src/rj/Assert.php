@@ -1,6 +1,8 @@
 <?php namespace Rj;
 
-use Exception, Phalcon\Mvc\Model;
+use Exception,
+	Phalcon\Mvc\Model,
+	Phalcon\HTTP\RequestInterface;
 
 class Assert {
 
@@ -21,6 +23,10 @@ class Assert {
 
 	public static function found($cond, $message = 'Page not found') {
 		static::true($cond, $message);
+	}
+
+	public static function post(RequestInterface $request, $message = "Only POST requests allowed") {
+		Assert::true($request->isPost(), $message);
 	}
 
 }
