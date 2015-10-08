@@ -1,3 +1,8 @@
 <?php namespace Rj\EI;
 
-interface ValidationErrorInterface {}
+interface ValidationErrorInterface {
+
+	/** @return string */
+	public function getField();
+
+}

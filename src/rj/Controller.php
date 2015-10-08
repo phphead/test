@@ -3,6 +3,7 @@
 use Exception, Closure,
 	Rj\EI\ValidationErrorInterface,
 	Phalcon\Validation,
+	Phalcon\Validation\Message,
 	Phalcon\Mvc\Model as PhalconModel;
 
 class Controller extends \Phalcon\Mvc\Controller {
@@ -41,6 +42,11 @@ class Controller extends \Phalcon\Mvc\Controller {
 
 		} catch (ValidationErrorInterface $e) {
 			if (isset($messages)) {
+
+				if ($e->getMessage()) {
+					$messages->appendMessage(new Message($e->getMessage(), $e->getField()));
+				}
+
 				$this->view->setVar('messages', $messages);
 				$this->view->setVar('userData', $this->request->getPost());
 
