@@ -1,12 +1,14 @@
 <?php namespace Rj;
 
 use Exception, Closure,
-	Phalcon\Validation;
+	Rj\EI\ValidationErrorInterface,
+	Phalcon\Validation,
+	Phalcon\Mvc\Model as PhalconModel;
 
 class Controller extends \Phalcon\Mvc\Controller {
 
 	/** @deprecated use Assert::noMessages() instead */
-	public function assertNoMessages(\Phalcon\Mvc\Model $model) {
+	public function assertNoMessages(PhalconModel $model) {
 		Assert::noMessages($model);
 	}
 
@@ -34,8 +36,16 @@ class Controller extends \Phalcon\Mvc\Controller {
 				}
 
 			} else {
+				throw new ValidationException();
+			}
+
+		} catch (ValidationErrorInterface $e) {
+			if (isset($messages)) {
 				$this->view->setVar('messages', $messages);
 				$this->view->setVar('userData', $this->request->getPost());
+
+			} else {
+				throw $e;
 			}
 
 		} catch (Exception $e) {
