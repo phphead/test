@@ -7,13 +7,13 @@ class ValidationException extends Exception implements ValidationErrorInterface 
 
 	protected $_field;
 
-	public function __construct($message = "", $code = 0) {
-		if (is_array($message)) {
-			$this->_field = $message['field'];
-			$message      = $message['message'];
+	public function __construct($message = "", $code = 0, Exception $previous = null) {
+		if (list($field, $msg) = explode(':', $message, 1)) {
+			$this->_field = $field;
+			$message      = $msg;
 		}
 
-		parent::__construct($message, $code);
+		parent::__construct($message, $code, $previous);
 	}
 
 	public function getField() {
