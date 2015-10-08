@@ -41,6 +41,8 @@ class Controller extends \Phalcon\Mvc\Controller {
 			}
 
 		} catch (ValidationErrorInterface $e) {
+			$this->db->rollback();
+
 			if (isset($messages)) {
 
 				if ($e->getMessage()) {
