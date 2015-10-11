@@ -6,7 +6,7 @@ class MailerSMTP extends Mailer
 {
     protected $_hostname = '127.0.0.1';
 
-    public function send($from, $to, $subject, $body)
+    public function send($from, $to, $subject, $body, $headers = '')
     {
         if (is_array($from) && count($from) == 2) {
             $encodedFrom = static::_encode($from[0]) . ' <' . $from[1] . '>';
@@ -39,6 +39,11 @@ class MailerSMTP extends Mailer
                 return $code ? $hear($code) : null;
             };
 
+			$_headers = explode("\n", $headers);
+			if ( ! stristr(strtolower($headers), 'content-type')) {
+				$_headers[] = 'Content-Type: text/plain; charset=utf-8';
+			}
+
             $hear(220);
             $say('HELO ' . $config->smtp_hostname, 250);
             $say('MAIL FROM: ' . $config->mailer_sender_email, 250);
@@ -47,7 +52,8 @@ class MailerSMTP extends Mailer
             $say('Subject: ' . static::_encode($subject));
             $say('From: ' . $encodedFrom);
             $say('To: ' . $to);
-            $say('Content-Type: text/plain; charset=utf-8');
+			foreach ($_headers as $str)
+            	$say($str);
             $say('');
             $say($body);
             $say('.', 250);

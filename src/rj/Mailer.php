@@ -12,7 +12,7 @@ class Mailer
         return '=?utf-8?b?' . base64_encode($value) . '?=';
     }
 
-    public function send($from, $to, $subject, $body)
+    public function send($from, $to, $subject, $body, $headers = '')
     {
         $headers = array(
             'Content-Type: text/plain; charset=utf-8',
