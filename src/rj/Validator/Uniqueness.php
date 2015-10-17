@@ -1,6 +1,7 @@
-<?php namespace Rj;
+<?php namespace Rj\Validator;
 
-use Phalcon\Validation\Message,
+use Rj\Assert,
+	Phalcon\Validation\Message,
 	Phalcon\Validation\Validator,
 	Phalcon\Validation\ValidatorInterface;
 
