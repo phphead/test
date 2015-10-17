@@ -25,7 +25,8 @@ class Uniqueness extends Validator implements ValidatorInterface
 		]);
 
 		if ($model) {
-			$validator->appendMessage(new Message("Field '$attribute' is not unique", $attribute));
+			$message = $this->getOption('message') ?: "Field '$attribute' is not unique";
+			$validator->appendMessage(new Message($message, $attribute));
 			return false;
 		}
 	}
