@@ -52,8 +52,9 @@ class MailerSMTP extends Mailer
             $say('Subject: ' . static::_encode($subject));
             $say('From: ' . $encodedFrom);
             $say('To: ' . $to);
-			foreach ($_headers as $str)
-            	$say($str);
+
+			foreach ($_headers as $str) $say($str);
+
             $say('');
             $say($body);
             $say('.', 250);
