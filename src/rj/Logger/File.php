@@ -6,7 +6,7 @@ use Exception,
 class Logger_File extends Phalcon_Logger_File {
 
 	public function exception(Exception $e) {
-		$this->error("Exception: {$e->getMessage()}\nTrace: {$e->getTraceAsString()}");
+		$this->error("Exception: " . get_class($e) . ": {$e->getMessage()}\nTrace: {$e->getTraceAsString()}");
 	}
 
 }
