@@ -39,7 +39,7 @@ class MailerSMTP extends Mailer
                 return $code ? $hear($code) : null;
             };
 
-			$_headers = explode("\n", $headers);
+			$_headers = $headers ? explode("\n", $headers) : [];
 			if ( ! stristr(strtolower($headers), 'content-type')) {
 				$_headers[] = 'Content-Type: text/plain; charset=utf-8';
 			}
