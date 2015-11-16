@@ -1,7 +1,6 @@
 <?php namespace Rj;
 
-use Phalcon\Di,
-	Phalcon\Logger\Adapter\File as Logger_File;
+use Phalcon\Di;
 
 /**
  * Class Logger
