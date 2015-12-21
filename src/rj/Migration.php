@@ -95,24 +95,34 @@ class Migration {
 		$dir = static::_dir();
 
 		$db = DI::getDefault()->getShared('db');
+		$files = [];
 
 		if ($handle = opendir($dir)) {
 			while (false !== ($entry = readdir($handle))) {
 				if ( ! is_dir($dir . $entry)) {
-					try {
-						if (false !== array_search($entry, $mg)) continue;
-
-						echo "Executing $entry...\n";
-
-						include "{$dir}$entry";
-
-						$mg[] = $entry;
-						static::_writeMeta($td, $mg);
-
-					} catch (Exception $e) {
-						throw $e;
-					}
+					$files[$entry] = [ $dir, $entry ];
 				}
+			}
+		}
+
+		ksort($files);
+
+		foreach ($files as $row) {
+			$dir   = $row[0];
+			$entry = $row[1];
+
+			try {
+				if (false !== array_search($entry, $mg)) continue;
+
+				echo "Executing $entry...\n";
+
+				include "{$dir}$entry";
+
+				$mg[] = $entry;
+				static::_writeMeta($td, $mg);
+
+			} catch (Exception $e) {
+				throw $e;
 			}
 		}
 	}
