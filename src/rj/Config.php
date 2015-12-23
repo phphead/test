@@ -1,5 +1,12 @@
 <?php namespace Rj;
 
+use Phalcon\DI;
+
+/**
+ * @property string $smtp_hostname
+ * @property bool   $mail_exceptions
+ * @property bool   $production
+ */
 class Config {
 
 	/** @var bool */
@@ -16,9 +23,9 @@ class Config {
 	/** @var string */
 	public $mailer;
 
-	/** @return \Config */
+	/** @return Config */
 	public static function instance() {
-		return \Phalcon\DI::getDefault()->getShared('config');
+		return DI::getDefault()->getShared('config');
 	}
 
 }

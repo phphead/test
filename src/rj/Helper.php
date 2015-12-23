@@ -1,7 +1,10 @@
 <?php namespace Rj;
 
 use Exception,
-	Phalcon\DI;
+	Phalcon\DI,
+	Phalcon\Mvc\Application,
+	Phalcon\Mvc\Dispatcher\Exception as PhalconException,
+	Rj\EI\Http404Interface;
 
 class Helper {
 
@@ -30,7 +33,7 @@ class Helper {
 
 			$message = date('Y-m-d H:i:s') . ' ' . get_class($e) . ': ' . $e->getMessage() . "\n"
 				. 'UserAgent: ' . $request->getUserAgent() . "\n"
-				. 'HTTP Referer: ' . urldecode($request->getHTTPReferer()) . "\n"
+				. 'HTTP Referrer: ' . urldecode($request->getHTTPReferer()) . "\n"
 				. $request->getClientAddress() . " URL: " . $request->getScheme() . '://' . $request->getHttpHost() . urldecode($requestUri) . "\n"
 				. $e->getTraceAsString() . "\n";
 
@@ -41,17 +44,47 @@ class Helper {
 		}
 
 		if (Config::instance()->mail_exceptions && $mail) {
-			try {
-				//if ( ! $e instanceof PageNotFound) {
-				/** @var MailerInterface $mailer */
-				$mailer = $di->getShared('mailer');
-				$mailer::push2admin('Exception', $message);
-				//}
+			switch (true) {
+//			case $e instanceof PageNotFound:
+//			case $e instanceof Phalcon\Mvc\Dispatcher\Exception:
+//				break;
 
-			} catch (Exception $e) {
+				default:
+					/** @var MailerInterface $mailer */
+					$mailer = $di->getShared('mailer');
+					$mailer::push2admin('Exception', $message);
+					break;
 			}
 		}
 
 		Logger::messages()->error($message);
+	}
+
+	public static function setExceptionHandler() {
+		set_exception_handler(function(Exception $e) {
+			static::logException($e);
+
+			if ( ! Config::instance()->production || PHP_SAPI == 'cli') {
+				throw $e;
+
+			} else {
+				$app = new Application(DI::getDefault());
+
+				switch (true) {
+					case $e instanceof Http404Interface:
+					case $e instanceof PhalconException:
+						header('HTTP/1.1 404 Not Found');
+						header('Status: 404 Not Found');
+						exit($app->handle('/error/show404')->getContent());
+
+					default:
+						header('HTTP/1.1 503 Service Temporarily Unavailable');
+						header('Status: 503 Service Temporarily Unavailable');
+						header('Retry-After: 3600');
+						exit($app->handle('/error/show503')->getContent());
+				}
+			}
+		});
+
 	}
 }
