@@ -85,6 +85,18 @@ class Helper {
 				}
 			}
 		});
+	}
 
+	public static function setErrorHandler() {
+		set_error_handler(function($errno, $errstr, $errfile, $errline) {
+			switch ($errno) {
+				case E_USER_NOTICE:
+				case E_STRICT:
+					break;
+
+				default:
+					Logger::messages()->error(sprintf("Error: #%d %s at %s:%d", $errno, $errstr, $errfile, $errline));
+			}
+		});
 	}
 }
