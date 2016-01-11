@@ -50,9 +50,7 @@ class Helper {
 //				break;
 
 				default:
-					/** @var MailerInterface $mailer */
-					$mailer = $di->getShared('Mailer');
-					$mailer::push2admin('Exception', $message);
+					\MailQueue::push2admin('Exception', $message);
 					break;
 			}
 		}
