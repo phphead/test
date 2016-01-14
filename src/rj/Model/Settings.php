@@ -13,7 +13,7 @@ class Settings extends Phalcon_Model {
 	public static function get($key = null) {
 		if (null === static::$_settings) {
 			static::$_settings = [];
-			foreach (Settings::find() as $entry) {
+			foreach (static::find() as $entry) {
 				static::$_settings[$entry->key] = $entry->value;
 			}
 		}
@@ -31,9 +31,9 @@ class Settings extends Phalcon_Model {
 	}
 
 	public static function set($key, $value) {
-		$entry = Settings::findFirst([ 'key = ?0', 'bind' => [ $key ] ]);
+		$entry = static::findFirst([ 'key = ?0', 'bind' => [ $key ] ]);
 		if ( ! $entry) {
-			$entry = new Settings();
+			$entry = new static();
 			$entry->key = $key;
 		}
 
