@@ -19,7 +19,9 @@ class Settings extends Phalcon_Model {
 		}
 
 		if ($key) {
-			return isset(static::$_settings[$key]) ? static::$_settings[$key] : static::$defaults[$key];
+			return isset(static::$_settings[$key])
+				? static::$_settings[$key]
+				: (isset(static::$defaults[$key]) ? static::$defaults[$key] : null);
 
 		} else {
 			$ret = [];
