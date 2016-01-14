@@ -31,12 +31,20 @@ class Migration {
 	}
 
 	protected static function _readMeta() {
-		list ($a1, $a2) = @ unserialize(file_get_contents(static::_getTableDataFileName()));
+		//$raw = file_get_contents(static::_getTableDataFileName());
+		/** @var Model\Settings $settings */
+		$settings = DI::getDefault()['Settings'];
+		$raw =    $settings::get('_database_struct');
+
+		list ($a1, $a2) = @ unserialize($raw);
 		return [ $a1 ?: [], $a2 ?: [] ];
 	}
 
 	protected static function _writeMeta($tableData, $migrations) {
-		file_put_contents(static::_getTableDataFileName(), serialize([ $tableData, $migrations ]));
+		//file_put_contents(static::_getTableDataFileName(), serialize([ $tableData, $migrations ]));
+		/** @var Model\Settings $settings */
+		$settings = DI::getDefault()['Settings'];
+		$settings::set('_database_struct', serialize([ $tableData, $migrations ]));
 	}
 
 	public static function dump() {

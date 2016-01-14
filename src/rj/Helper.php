@@ -19,6 +19,45 @@ class Helper {
 		}
 	}
 
+	public static function escapeArray($adapter, array $values) {
+		$ret = '';
+		foreach ($values as $value) {
+			$ret .= ($ret ? ',' : '') . $adapter->escapeString($value);
+		}
+		return $ret;
+	}
+
+	public static function dateDiffInDays($date, $now = null) {
+		if (null === $now) {
+			$now = time();
+		}
+
+		if (is_string($date)) {
+			$date = strtotime($date);
+		}
+
+		return floor((($date - $now) / 86400) + 1);
+	}
+
+	public static function strEnd($num, $endings = '') {
+		list($s1,$s2,$s3) = explode(',', $endings);
+		$num = abs($num);
+		$num = $num % 100;
+
+		if (($num > 4) && ($num < 21)) {
+			return $s3;
+		}
+		$num = $num % 10;
+		if (($num == 0) || ($num > 4)) {
+			return $s3;
+		}
+		if ($num == 1) {
+			return $s1;
+		}
+
+		return $s2;
+	}
+
 	public static function logException(Exception $e, $mail = true)
 	{
 		$di = DI::getDefault();
