@@ -34,7 +34,7 @@ class Migration {
 		//$raw = file_get_contents(static::_getTableDataFileName());
 		/** @var Model\Settings $settings */
 		$settings = DI::getDefault()['Settings'];
-		$raw =    $settings::get('_database_struct');
+		$raw = gzdecode($settings::get('_database_struct'));
 
 		list ($a1, $a2) = @ unserialize($raw);
 		return [ $a1 ?: [], $a2 ?: [] ];
@@ -44,7 +44,7 @@ class Migration {
 		//file_put_contents(static::_getTableDataFileName(), serialize([ $tableData, $migrations ]));
 		/** @var Model\Settings $settings */
 		$settings = DI::getDefault()['Settings'];
-		$settings::set('_database_struct', serialize([ $tableData, $migrations ]));
+		$settings::set('_database_struct', gzencode(serialize([ $tableData, $migrations ]), 9));
 	}
 
 	public static function dump() {
