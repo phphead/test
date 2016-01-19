@@ -8,7 +8,7 @@ class Model extends Phalcon_Model {
 	public function save($data = null, $whiteList = null) {
 		$ref = new ReflectionClass($this);
 
-		if ($ref->hasProperty('created_at')) {
+		if ($ref->hasProperty('created_at') && ! $this->created_at) {
 			$this->created_at = date('Y-m-d H:i:s');
 		}
 
