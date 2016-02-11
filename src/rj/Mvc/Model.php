@@ -3,6 +3,10 @@
 use ReflectionClass,
 	Phalcon\Mvc\Model as Phalcon_Model;
 
+/**
+ * @method Model   findFirst($parameters = null) static
+ * @method Model[] find($parameters = null) static
+ */
 class Model extends Phalcon_Model {
 
 	public function save($data = null, $whiteList = null) {
