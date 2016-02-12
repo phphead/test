@@ -30,12 +30,6 @@ class Controller extends \Phalcon\Mvc\Controller {
 
 				$this->db->commit();
 
-				if ($success instanceof Closure) {
-					return $success();
-				} else {
-					return $success;
-				}
-
 			} else {
 				throw new ValidationException();
 			}
@@ -59,6 +53,12 @@ class Controller extends \Phalcon\Mvc\Controller {
 		} catch (Exception $e) {
 			$this->db->rollback();
 			throw $e;
+		}
+
+		if ($success instanceof Closure) {
+			return $success();
+		} else {
+			return $success;
 		}
 	}
 
