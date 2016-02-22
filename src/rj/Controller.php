@@ -50,12 +50,17 @@ class Controller extends \Phalcon\Mvc\Controller {
 				throw $e;
 			}
 
+			$success = false;
+
 		} catch (Exception $e) {
 			$this->db->rollback();
 			throw $e;
 		}
 
-		if ($success instanceof Closure) {
+		if (false === $success) {
+			// pass
+
+		} else if ($success instanceof Closure) {
 			return $success();
 		} else {
 			return $success;
