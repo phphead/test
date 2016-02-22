@@ -6,6 +6,8 @@ use Rj\Migration\Table,
 
 class Migration {
 
+	public static $_dir;
+
 	public static function test() {
 		if (file_exists(self::_getTableDataFileName())) {
 			Assert::true(is_writeable(self::_getTableDataFileName()));
@@ -15,8 +17,12 @@ class Migration {
 		}
 	}
 
+	public static function setDir($dir) {
+		static::$_dir = $dir;
+	}
+
 	protected static function _dir() {
-		return DOCROOT . 'migrations/';
+		return static::$_dir ?: DOCROOT . 'migrations/';
 	}
 
 	protected static function _getTableDataFileName() {
