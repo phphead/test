@@ -143,7 +143,7 @@ class Helper {
 		});
 	}
 
-	public function fileDownload($url, $fileName) {
+	public static function fileDownload($url, $fileName) {
 		try {
 			Assert::true($f = fopen($url, 'r'));
 			Assert::true($fd = fopen($fileName, 'w+'));
