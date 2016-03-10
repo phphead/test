@@ -136,4 +136,25 @@ class Helper {
 			}
 		});
 	}
+
+	public static function fileUnlinkOnShutdown($fileName) {
+		register_shutdown_function(function() use ($fileName) {
+			if (file_exists($fileName)) unlink($fileName);
+		});
+	}
+
+	public function fileDownload($url, $fileName) {
+		try {
+			Assert::true($f = fopen($url, 'r'));
+			Assert::true($fd = fopen($fileName, 'w+'));
+			while ( ! feof($f)) fwrite($fd, fread($f, 8 * 1024));
+			fclose($f);
+			fclose($fd);
+
+			return true;
+
+		} catch (Exception $e) {
+			return false;
+		}
+	}
 }
