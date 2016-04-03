@@ -4,7 +4,8 @@ use Exception,
 	Phalcon\DI,
 	Phalcon\Mvc\Application,
 	Phalcon\Mvc\Dispatcher\Exception as PhalconException,
-	Rj\EI\Http404Interface;
+	Rj\EI\Http404Interface,
+	Rj\EI\DoNotMail;
 
 class Helper {
 
@@ -86,7 +87,8 @@ class Helper {
 			switch (true) {
 //			case $e instanceof PageNotFound:
 //			case $e instanceof Phalcon\Mvc\Dispatcher\Exception:
-//				break;
+				case $e instanceof DoNotMail:
+					break;
 
 				default:
 					\MailQueue::push2admin('Exception', $message);

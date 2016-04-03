@@ -8,6 +8,11 @@ use Exception, Closure,
 
 class Controller extends \Phalcon\Mvc\Controller {
 
+	public function initialize() {
+		if (count($ex = explode('\\', get_class($this))) > 1)
+			$this->view->namespace = strtolower($ex[0]);
+	}
+
 	/** @deprecated use Assert::noMessages() instead */
 	public function assertNoMessages(PhalconModel $model) {
 		Assert::noMessages($model);
