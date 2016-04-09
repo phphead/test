@@ -1,7 +1,7 @@
 <?php namespace Rj\Model;
 
 use Exception,
-	Rj\Mvc\Model, Rj\Assert, Rj\Logger, Rj\Random, Rj\UserInterface,
+	Rj\Mvc\Model, Rj\Assert, Logger, Rj\Random, Rj\UserInterface,
 	Phalcon\DI,
 	Phalcon\Db\RawValue as Phalcon_RawValue,
 	Phalcon\Mvc\Model as Phalcon_Model;

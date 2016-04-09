@@ -1,6 +1,6 @@
 <?php namespace Rj;
 
-use Exception,
+use Logger, Exception,
 	Phalcon\DI,
 	Phalcon\Mvc\Application,
 	Phalcon\Mvc\Dispatcher\Exception as PhalconException,
@@ -101,14 +101,14 @@ class Helper {
 
 	public static function setExceptionHandler() {
 		set_exception_handler(function(Exception $e) {
-			static::logException($e);
+			Logger::messages()->exception($e);
 
 			if ( ! Config::instance()->production || PHP_SAPI == 'cli') {
 				throw $e;
 
 			} else {
 				$app = new Application(DI::getDefault());
-				$app->dispatcher->setParam('exception', $e);
+				DI::getDefault()->set('last_exception', $e);
 
 				switch (true) {
 					case $e instanceof Http404Interface:

@@ -1,5 +1,7 @@
 <?php namespace Rj;
 
+use \Logger;
+
 class MailerLog
 {
     public static $_logger = 'email';
