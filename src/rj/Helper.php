@@ -108,6 +108,7 @@ class Helper {
 
 			} else {
 				$app = new Application(DI::getDefault());
+				$app->dispatcher->setParam('exception', $e);
 
 				switch (true) {
 					case $e instanceof Http404Interface:
