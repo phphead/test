@@ -16,7 +16,7 @@ class Logger {
 		return static::instance($name);
 	}
 
-	public static function getLoggerInstance($logFileName) {
+	public static function getLoggerInstance($name, $logFileName) {
 		return new Logger_File($logFileName);
 	}
 
@@ -37,7 +37,7 @@ class Logger {
 				exit('Log file is does not exists or not writeable ' . $logFileName);
 			}
 
-			$logger = static::getLoggerInstance($logFileName);
+			$logger = static::getLoggerInstance($name, $logFileName);
 			$di->set($serviceName, $logger, true);
 
 			return $logger;

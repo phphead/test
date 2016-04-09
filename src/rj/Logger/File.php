@@ -1,13 +1,13 @@
 <?php namespace Rj;
 
-use Config, Exception,
+use Exception,
 	Phalcon\DI,
 	Phalcon\Http\RequestInterface,
 	Phalcon\Logger\Adapter\File as Phalcon_Logger_File;
 
 class Logger_File extends Phalcon_Logger_File {
 
-	public function exception(Exception $e) {
+	public function exception(Exception $e) { exit('ok');
 		if ($this->testMailing($e))
 			$this->mailException($e);
 
@@ -15,14 +15,13 @@ class Logger_File extends Phalcon_Logger_File {
 	}
 
 	public function mailException(Exception $e) {
-		if (isset(DI::getDefault()['MailQueue'])) {
-			$queue = DI::getDefault()['MailQueue'];
-			$queue::push2admin('Exception', $this->getExceptionExpandedMessage($e));
+		if (class_exists('MailQueue', true)) {
+			\MailQueue::push2admin('Exception', $this->getExceptionExpandedMessage($e));
 		}
 	}
 
 	public function testMailing(Exception $e) {
-		if (Config::instance()->mail_exceptions) {
+		if (\Config::instance()->mail_exceptions) {
 			switch (true) {
 				case $e instanceof DoNotMail:
 					break;

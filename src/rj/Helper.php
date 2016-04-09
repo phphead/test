@@ -1,6 +1,6 @@
 <?php namespace Rj;
 
-use Logger, Exception,
+use Exception,
 	Phalcon\DI,
 	Phalcon\Mvc\Application,
 	Phalcon\Mvc\Dispatcher\Exception as PhalconException,
@@ -96,12 +96,12 @@ class Helper {
 			}
 		}
 
-		Logger::messages()->error($message);
+		\Logger::messages()->error($message);
 	}
 
 	public static function setExceptionHandler() {
 		set_exception_handler(function(Exception $e) {
-			Logger::messages()->exception($e);
+			\Logger::messages()->exception($e);
 
 			if ( ! Config::instance()->production || PHP_SAPI == 'cli') {
 				throw $e;
@@ -135,7 +135,7 @@ class Helper {
 					break;
 
 				default:
-					Logger::messages()->error(sprintf("Error: #%d %s at %s:%d", $errno, $errstr, $errfile, $errline));
+					\Logger::messages()->error(sprintf("Error: #%d %s at %s:%d", $errno, $errstr, $errfile, $errline));
 			}
 		});
 	}
