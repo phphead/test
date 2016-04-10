@@ -81,15 +81,17 @@ class Pager {
 
 	public function render() {
 		if (null === $this->_html) {
+			$get = isset($_GET) && is_array($_GET) ? $_GET : [];
 			$this->_html = '';
 			$this->_load();
 			$last = 0;
 			for ($i = 0; $i < $this->pageCount; $i++)
 				if ($i == 0 || $i == $this->pageCount - 1 || ($i > $this->page - 4 && $i < $this->page + 4)) {
+					$get['page'] = $i;
 					if ($i > 0 && $last < $i - 1)
 						$this->_html .= ' ... ';
 					$this->_html .= '<a class="btn btn-xs ' . ($this->page == $i ? 'btn-primary' : 'btn-default') . '"'
-						. ' href="?page=' . htmlspecialchars($i) . '">' . htmlspecialchars($i + 1) . '</a>' . "\n";
+						. ' href="?' . http_build_query($get) . '">' . htmlspecialchars($i + 1) . '</a>' . "\n";
 					$last = $i;
 				}
 		}
