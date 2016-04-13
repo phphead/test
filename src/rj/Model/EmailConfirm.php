@@ -16,7 +16,7 @@ CREATE TABLE `ani_email_confirm` (
   `confirm_key` varchar(255) DEFAULT NULL,
   `confirm_success` enum('y') DEFAULT NULL,
   PRIMARY KEY (`email_confirm_id`) USING BTREE,
-  KEY `person_id` (`person_id`) USING BTREE
+  KEY `user_id` (`user_id`) USING BTREE
 ) ENGINE=InnoDB;
 */
 
@@ -25,14 +25,14 @@ abstract class EmailConfirm extends Model {
     /**
      * @return bool|EmailConfirm
      */
-    public static function createForPerson(UserInterface $person) {
-        if ( ! $person->getEmail()) {
+    public static function createForUser(UserInterface $user) {
+        if ( ! $user->getEmail()) {
             return false;
         }
 
         $ret = new static();
 		try {
-			$created = $ret->save([ 'person_id' => $person->getId(), 'email' => $person->getEmail() ]);
+			$created = $ret->save([ 'user_id' => $user->getId(), 'email' => $user->getEmail() ]);
 			Assert::noMessages($ret);
 
 			if ($created) {
@@ -51,19 +51,19 @@ abstract class EmailConfirm extends Model {
     }
 
 	/** @return EmailConfirm|false */
-	public static function findLastConfirmation(UserInterface $person) {
+	public static function findLastConfirmation(UserInterface $user) {
 		return static::findFirst([
-			'person_id = :uid: and person_id is not null',
-			'bind' => [ 'uid' => $person->getId() ],
+			'user_id = ?0 and user_id is not null',
+			'bind' => [ $user->getId() ],
 			'order' => 'email_confirm_id desc'
 		]);
 	}
 
-    public static function findByPersonIdAndKey($person_id, $confirm_key) {
+    public static function findByUserIdAndKey($user_id, $confirm_key) {
         /** @var EmailConfirm $confirm */
         $confirm = static::findFirst([
-			'expires_at is not null and expires_at > NOW() and person_id = :uid: and person_id is not null',
-            'bind' => [ 'uid' => $person_id ],
+			'expires_at is not null and expires_at > NOW() and user_id = ?0 and user_id is not null',
+            'bind' => [ $user_id ],
         ]);
 
         if ($confirm) {
@@ -85,7 +85,7 @@ abstract class EmailConfirm extends Model {
         // Expiration date
         $expires_at,
         // Found user ID
-        $person_id,
+        $user_id,
         // Input email
         $email,
         // Mail queue ID
@@ -110,10 +110,10 @@ abstract class EmailConfirm extends Model {
     public function expireOlder() {
         $this->getWriteConnection()->begin();
         try {
-            if ($this->person_id) {
+            if ($this->user_id) {
                 $this->getWriteConnection()->query("
-                    update {$this->getSource()} set expires_at = null where person_id = ? and email_confirm_id != ?
-                ", array($this->person_id, $this->email_confirm_id));
+                    update {$this->getSource()} set expires_at = null where user_id = ? and email_confirm_id != ?
+                ", array($this->user_id, $this->email_confirm_id));
             }
 
             $this->getWriteConnection()->commit();
@@ -130,7 +130,7 @@ abstract class EmailConfirm extends Model {
     }
 
     public function confirm() {
-        if ($person = $this->_getUserModel()) {
+        if ($user = $this->_getUserModel()) {
             $this->getWriteConnection()->begin();
             try {
                 $this->save([
@@ -141,8 +141,7 @@ abstract class EmailConfirm extends Model {
 
 				$this->expireOlder();
 
-                $person->save([ 'email_confirmed' => 1 ]);
-				Assert::noMessages($person);
+	            $this->_confirm();
 
                 $this->getWriteConnection()->commit();
 
@@ -158,5 +157,7 @@ abstract class EmailConfirm extends Model {
 
 	/** @return Phalcon_Model */
 	abstract protected function _getUserModel();
+
+	abstract protected function _confirm();
 
 }
