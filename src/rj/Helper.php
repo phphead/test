@@ -160,4 +160,39 @@ class Helper {
 			return false;
 		}
 	}
+
+	public static function prettyPhone($string, $mask = true) {
+		if (preg_match('/^(\+7)(\d{3})(\d{3})(\d{2})(\d{2})$/iD', $string, $pock)) {
+			if ($mask) {
+				return sprintf('%s (%s) %s-%s-%s', $pock[1], str_repeat('*', strlen($pock[2])), str_repeat('*', strlen($pock[3])), $pock[4], $pock[5]);
+
+			} else {
+				return sprintf('%s (%s) %s-%s-%s', $pock[1], $pock[2], $pock[3], $pock[4], $pock[5]);
+			}
+
+		} else {
+			return $string;
+		}
+	}
+
+	public static function sanitizePhone($string) {
+		$string = str_replace([ '-', '(', ')', ' ' ], '', $string);
+
+		if (preg_match('/^\+7\d+$/iD', $string)) {
+			return $string;
+
+		} else if (preg_match('/^8\d+$/iD', $string)) {
+			return '+7' . substr($string, 1);
+
+		} else if (preg_match('/^7\d+$/iD', $string)) {
+			return '+' . $string;
+
+		} else if (preg_match('/^\d+$/iD', $string)) {
+			return '+7' . $string;
+
+		} else {
+			return '';
+		}
+	}
+
 }

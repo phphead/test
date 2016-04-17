@@ -19,6 +19,7 @@ class MailerLog
         if ($this->triggerError) {
             trigger_error($this->triggerError);
             $result = false;
+
         } else {
 			\Logger::instance(static::$_logger)->log("Message from '$from' to '$to' with subject '$subject' and content\n$body");
             $result = true;
