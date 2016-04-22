@@ -23,4 +23,15 @@ class Model extends Phalcon_Model {
 		return parent::save($data, $whiteList);
 	}
 
+	public function delete() {
+		$ref = new ReflectionClass($this);
+
+		if ($ref->hasProperty('deleted_at')) {
+			return $this->deleted_at ? true : $this->save([ 'deleted_at' => date('Y-m-d H:i:s') ]);
+
+		} else {
+			return parent::delete();
+		}
+	}
+
 }

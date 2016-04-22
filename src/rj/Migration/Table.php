@@ -146,7 +146,7 @@ class Table {
 			. implode(",\n\t", $keys) : '')
 			. "\n)"
 			. ($this->engine ? ' ENGINE = ' . $this->engine : '')
-			. ";\n";
+			. ";";
 	}
 
 	public function diff(Table $oldTable) {
@@ -193,7 +193,8 @@ class Table {
 			}
 		}
 
-		return implode("\n", $ret);
+		$ret = trim(implode("\n", $ret));
+		return $ret ? $ret . "\n" : '';
 	}
 
 	public function generate() {

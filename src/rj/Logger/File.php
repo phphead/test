@@ -3,7 +3,8 @@
 use Exception,
 	Phalcon\DI,
 	Phalcon\Http\RequestInterface,
-	Phalcon\Logger\Adapter\File as Phalcon_Logger_File;
+	Phalcon\Logger\Adapter\File as Phalcon_Logger_File,
+	Rj\EI\DoNotMail;
 
 class Logger_File extends Phalcon_Logger_File {
 
