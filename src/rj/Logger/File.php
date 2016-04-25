@@ -8,7 +8,7 @@ use Exception,
 
 class Logger_File extends Phalcon_Logger_File {
 
-	public function exception(Exception $e) { exit('ok');
+	public function exception(Exception $e) {
 		if ($this->testMailing($e))
 			$this->mailException($e);
 
