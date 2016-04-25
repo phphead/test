@@ -6,6 +6,7 @@ use Phalcon\DI;
  * @property string $smtp_hostname
  * @property bool   $mail_exceptions
  * @property bool   $production
+ * @property object $herald
  */
 class Config {
 
