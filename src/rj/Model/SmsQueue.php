@@ -39,9 +39,6 @@ class SmsQueue extends Model {
 		]);
 		Assert::noMessages($q);
 
-//		if ( ! Config::instance()->production)
-//			$q->send();
-
 		return $q;
 	}
 
