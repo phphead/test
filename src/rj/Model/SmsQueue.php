@@ -29,15 +29,14 @@ class SmsQueue extends Model {
 	}
 
 	/** @return SmsQueue */
-	public static function push($number, $text, $eventId = null) {
+	public static function push($number, $text, array $options = []) {
 		$q = new static();
 		$q->save([
 			'phone'      => $number,
 			'text'       => $text,
 			'created_at' => date('Y-m-d H:i:s'),
 			'status'     => static::STATUS_QUEUED,
-			'event_id'   => $eventId,
-		]);
+		] + $options);
 		Assert::noMessages($q);
 
 		return $q;
@@ -74,7 +73,7 @@ class SmsQueue extends Model {
 
 			if ($result) {
 				$this->sent_at = date('Y-m-d H:i:s');
-				$this->err     = '';
+				$this->err     = null;
 				$this->status  = static::STATUS_OK;
 
 			} else if ($error = error_get_last()) {
@@ -87,7 +86,7 @@ class SmsQueue extends Model {
 
 		} catch (Exception $e) {
 			$this->err    = $e->getMessage();
-			$this->status = 2;
+			$this->status = static::STATUS_ERR;
 		}
 
 		$this->save();
