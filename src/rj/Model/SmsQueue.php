@@ -15,6 +15,7 @@ CREATE TABLE `sms_queue` (
 */
 
 use Exception,
+	Rj\Helper,
 	Rj\Mvc\Model, Rj\Assert, Rj\Config;
 
 class SmsQueue extends Model {
@@ -61,9 +62,15 @@ class SmsQueue extends Model {
 		$gate = $this->getDI()->getShared('SmsGate');
 
 		try {
-			$result = $gate->send($this->phone, $this->text, [
-				'uid' => $this->sms_queue_id,
-			]);
+			if ($num = Helper::sanitizePhone($this->phone)) {
+				$result = $gate->send($num, $this->text, [
+					'uid' => $this->sms_queue_id,
+				]);
+
+			} else {
+				trigger_error('Invalid phone number ' . $this->phone);
+				$result = false;
+			}
 
 			if ($result) {
 				$this->sent_at = date('Y-m-d H:i:s');
