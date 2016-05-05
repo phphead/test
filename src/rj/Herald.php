@@ -24,6 +24,7 @@ class Herald {
 					"Project-Key: "   . sha1(static::_config()['project'] . sha1(static::_config()['api_key'])),
 					""
 				]),
+			    'timeout' => 2,
 			]
 		]);
 
@@ -47,6 +48,13 @@ class Herald {
 		$payload = json_encode($data);
 		$length  = strlen($payload);
 
+		$headers = [
+				"Host: " . static::_config()['host'],
+				"Project-Key: "   . sha1(static::_config()['project'] . sha1(static::_config()['api_key'])),
+				"Content-Type: multipart/form-data",
+				"Content-Length: " . $length,
+			];
+
 		$context = stream_context_create([
 			'http' => [
 				'header' => implode("\r\n", [
@@ -58,7 +66,8 @@ class Herald {
 				]),
 			    'method'  => 'POST',
 			    'content' => $payload,
-			]
+			    'timeout' => 2,
+			],
 		]);
 
 		$url = 'http://' . static::_host() . '/api01/' . static::_config()['project'] . '/mailing/queue';
