@@ -48,13 +48,6 @@ class Herald {
 		$payload = json_encode($data);
 		$length  = strlen($payload);
 
-		$headers = [
-				"Host: " . static::_config()['host'],
-				"Project-Key: "   . sha1(static::_config()['project'] . sha1(static::_config()['api_key'])),
-				"Content-Type: multipart/form-data",
-				"Content-Length: " . $length,
-			];
-
 		$context = stream_context_create([
 			'http' => [
 				'header' => implode("\r\n", [
@@ -92,6 +85,9 @@ class Herald {
 	/** @return bool */
 	public static function sendEmailMessage($subject, $to, $body) {
 		$typeList = static::getTypeList();
+
+		if (empty($typeList[0]))
+			return;
 
 		return static::queue([
 			'subject'         => $subject,
