@@ -15,6 +15,7 @@ CREATE TABLE `sms_queue` (
 */
 
 use Exception,
+	Rj\Helper,
 	Rj\Mvc\Model, Rj\Assert, Rj\Config;
 
 class SmsQueue extends Model {
@@ -28,19 +29,15 @@ class SmsQueue extends Model {
 	}
 
 	/** @return SmsQueue */
-	public static function push($number, $text, $eventId = null) {
+	public static function push($number, $text, array $options = []) {
 		$q = new static();
 		$q->save([
 			'phone'      => $number,
 			'text'       => $text,
 			'created_at' => date('Y-m-d H:i:s'),
 			'status'     => static::STATUS_QUEUED,
-			'event_id'   => $eventId,
-		]);
+		] + $options);
 		Assert::noMessages($q);
-
-//		if ( ! Config::instance()->production)
-//			$q->send();
 
 		return $q;
 	}
@@ -64,13 +61,19 @@ class SmsQueue extends Model {
 		$gate = $this->getDI()->getShared('SmsGate');
 
 		try {
-			$result = $gate->send($this->phone, $this->text, [
-				'uid' => $this->sms_queue_id,
-			]);
+			if ($num = Helper::sanitizePhone($this->phone)) {
+				$result = $gate->send($num, $this->text, [
+					'uid' => $this->sms_queue_id,
+				]);
+
+			} else {
+				trigger_error('Invalid phone number ' . $this->phone);
+				$result = false;
+			}
 
 			if ($result) {
 				$this->sent_at = date('Y-m-d H:i:s');
-				$this->err     = '';
+				$this->err     = null;
 				$this->status  = static::STATUS_OK;
 
 			} else if ($error = error_get_last()) {
@@ -83,7 +86,7 @@ class SmsQueue extends Model {
 
 		} catch (Exception $e) {
 			$this->err    = $e->getMessage();
-			$this->status = 2;
+			$this->status = static::STATUS_ERR;
 		}
 
 		$this->save();

@@ -5,7 +5,8 @@ use Exception, SoapClient,
 
 class Herald {
 
-	public function send($number, $text, array $options = []) {
+	/** @return int */
+	public function request($number, $text, array $options = []) {
 		if ( ! class_exists('SoapClient', false)) {
 			throw new Exception("Class SoapClient not found");
 		}
@@ -40,17 +41,41 @@ class Herald {
 
 		$res = file_get_contents(Config::instance()->herald->url, null, $context);
 
-		if (preg_match('#<respCode>(\d+)</respCode>#iD', $res, $pock)) {
-			if (0 == $pock[1]) {
-				return true;
+		if (preg_match('#<smsStatus>([^<]+)</smsStatus>#iD', $res, $pock1)) {
+			$status = $pock1[1];
 
-			} else {
-				throw new Exception("Error code " . $pock[1]);
-			}
+		} else {
+			$status = null;
+		}
+
+		if (preg_match('#<respCode>(\d+)</respCode>#iD', $res, $pock)) {
+			return [ $pock[1], $status ];
 
 		} else {
 			throw new Exception("Unknown error");
 		}
+	}
+
+	public function send($number, $text, array $options = []) {
+		$response = $this->request($number, $text, $options);
+		$code     = $response[0];
+
+		if (0 == $code) {
+			return true;
+
+		} else {
+			throw new Exception("Error code " . $code);
+		}
+	}
+
+	/** @return int */
+	public function check($uid, array $options = []) {
+		$options['uid'] = $uid;
+
+		$response = $this->request('', '', $options);
+		$status   = $response[1];
+
+		return 'DELIVERED' === strtoupper($status);
 	}
 
 }

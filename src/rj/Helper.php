@@ -178,7 +178,7 @@ class Helper {
 	public static function sanitizePhone($string) {
 		$string = str_replace([ '-', '(', ')', ' ' ], '', $string);
 
-		if (preg_match('/^\+7\d+$/iD', $string)) {
+		if (preg_match('/^\+\d+$/iD', $string)) {
 			return $string;
 
 		} else if (preg_match('/^8\d+$/iD', $string)) {

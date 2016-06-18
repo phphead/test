@@ -31,7 +31,10 @@ class Controller extends \Phalcon\Mvc\Controller {
 			$messages = $validation->validate($this->request->getPost());
 			if (count($messages) == 0) {
 
-				$callback($validation);
+				$messages = $callback($validation);
+
+				if ($messages instanceof Message\Group)
+					throw new ValidationException();
 
 				$this->db->commit();
 
