@@ -5,6 +5,10 @@ use Exception,
 
 class Assert {
 
+	public static function saved($model) {
+		static::noMessages($model);
+	}
+
 	public static function noMessages($model) {
 		/** @var \Rj\Mvc\Model $model */
 		$ret = '';
