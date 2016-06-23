@@ -1,12 +1,53 @@
 <?php namespace Rj;
 
-use Exception,
-	Phalcon\Db\Adapter\Pdo\Mysql as Mysql_Adapter;
+use Exception, Closure,
+	Phalcon\Db\Adapter\Pdo\Mysql as Mysql_Adapter,
+	Phalcon\Db\AdapterInterface,
+	Phalcon\DI;
 
 class Db
 {
     protected $_connection;
     protected $_profile = array();
+
+	/**
+	 * @param $param1 AdapterInterface|Closure
+	 * @param $param2 Closure|null
+	 *
+	 * @throws Exception
+	 */
+	public static function transaction() {
+		switch (func_num_args()) {
+			case 1:
+				$db       = DI::getDefault()['db'];
+				$callback = func_get_arg(0);
+				break;
+
+			case 2:
+				$db       = func_get_arg(0);
+				$callback = func_get_arg(1);
+				break;
+
+			default:
+				throw new Exception("Bad parameter count");
+		}
+
+		/** @var $db       AdapterInterface */
+		/** @var $callback Closure          */
+
+		Assert::true($db instanceof AdapterInterface);
+		Assert::true($callback instanceof Closure);
+
+		$db->begin();
+		try {
+			$ret = $callback($db);
+			$db->commit();
+
+		} catch (Exception $e) {
+			$db->rollback();
+			throw $e;
+		}
+	}
 
     protected function _profileQuery($query)
     {
