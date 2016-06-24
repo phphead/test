@@ -54,6 +54,12 @@ class Pager {
 		} else if ($model instanceof Criteria) {
 			$counter = $model->execute();
 
+			if (null === $this->_count)
+				$this->_count = call_user_func([ get_class($this->_model), 'count' ], $this->_options);
+
+			if (null === $this->_page)
+				$this->_page = static::getDI()['request']->get('page', 'uint', 0);
+
 			$this->_count     = count($counter);
 			$this->_pageCount = ceil($this->_count / $this->_onPage);
 			$this->_page      = max(0, min($this->_page, $this->_pageCount - 1));
