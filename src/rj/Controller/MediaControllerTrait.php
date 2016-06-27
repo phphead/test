@@ -26,7 +26,7 @@ trait MediaControllerTrait {
 		Assert::found($pkg = $this->getPackage($query));
 
 		$dst = DOCROOT . '/../public/media/';
-		@ Helper::mkdir($dst . dirname($query), 777);
+		@ Helper::mkdir($dst . dirname($query), 0777);
 
 		Assert::found($f = fopen('zip://' . $pkg . '#' . $query, 'r'));
 		Assert::true ($d = fopen($dst . $query, 'w'));
