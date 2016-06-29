@@ -15,6 +15,7 @@ class Db
 	 * @param $param2 Closure|null
 	 *
 	 * @throws Exception
+	 * @return mixed
 	 */
 	public static function transaction() {
 		switch (func_num_args()) {
@@ -42,6 +43,8 @@ class Db
 		try {
 			$ret = $callback($db);
 			$db->commit();
+
+			return $ret;
 
 		} catch (Exception $e) {
 			$db->rollback();
