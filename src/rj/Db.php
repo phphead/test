@@ -36,7 +36,7 @@ class Db
 		/** @var $db       AdapterInterface */
 		/** @var $callback Closure          */
 
-		Assert::true($db instanceof AdapterInterface);
+		//Assert::true($db instanceof AdapterInterface);
 		Assert::true($callback instanceof Closure);
 
 		$db->begin();
