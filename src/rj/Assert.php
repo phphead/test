@@ -44,7 +44,13 @@ class Assert {
 		}
 	}
 
-	public static function found($cond, $message = 'Page not found', $exceptionClass = 'Exception') {
+	public static function found($cond, $message = null, $exceptionClass = null) {
+		if (null === $message)
+			$message = 'Page not found';
+
+		if (null === $exceptionClass)
+			$exceptionClass = 'Exception';
+
 		static::true($cond, $message, $exceptionClass);
 	}
 
