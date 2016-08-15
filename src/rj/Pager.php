@@ -43,6 +43,8 @@ class Pager {
 					'limit'  => $this->_onPage,
 					'offset' => $this->_page * $this->_onPage,
 				] + $this->_options);
+
+			$this->_loaded = true;
 		}
 	}
 
