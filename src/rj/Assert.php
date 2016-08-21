@@ -1,9 +1,22 @@
 <?php namespace Rj;
 
-use Exception,
+use Exception, Closure,
 	Phalcon\HTTP\RequestInterface;
 
 class Assert {
+
+	protected static function _generateExceptionMessage($default = 'Assertion failure') {
+		$data = debug_backtrace()[1];
+
+		$lines = explode("\n", str_replace("\r", "", file_get_contents($data['file'])));
+		$str   = trim($lines[$data['line'] - 1]);
+
+		if (preg_match('/\((.*)\)/iD', $str, $pock)) {
+			$str = $pock[1];
+		}
+
+		return $str ?: $default;
+	}
 
 	public static function saved($model) {
 		static::noMessages($model);
@@ -19,14 +32,26 @@ class Assert {
 		if ($ret) throw new Exception($ret);
 	}
 
-	public static function true($condition, $message = 'Assertion failure') {
+	public static function true($condition, $message = null, $exceptionClass = 'Exception') {
+		if ($condition instanceof Closure)
+			$condition = $condition();
+
 		if ( ! $condition) {
-			throw new Exception($message);
+			if (null === $message)
+				$message = 'Assertion failure in "' . static::_generateExceptionMessage() . '"';
+
+			throw new $exceptionClass($message);
 		}
 	}
 
-	public static function found($cond, $message = 'Page not found') {
-		static::true($cond, $message);
+	public static function found($cond, $message = null, $exceptionClass = null) {
+		if (null === $message)
+			$message = 'Page not found';
+
+		if (null === $exceptionClass)
+			$exceptionClass = 'Exception';
+
+		static::true($cond, $message, $exceptionClass);
 	}
 
 	public static function post(RequestInterface $request, $message = "Only POST requests allowed") {
