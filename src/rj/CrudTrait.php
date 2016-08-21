@@ -55,8 +55,8 @@ trait CrudTrait {
 				function (Validation $validation) use ($model) {
 					$this->crud_modelSave($model, $validation);
 				},
-				function () use ($success) {
-					return $success ?: $this->response->redirect([
+				function () use ($success, $model) {
+					return $success($model) ?: $this->response->redirect([
 						'for'        => $this->router->getMatchedRoute()->getName(),
 					    'controller' => $this->dispatcher->getControllerName(),
 					    'action'     => 'index',
@@ -66,11 +66,11 @@ trait CrudTrait {
 		}
 	}
 
-	public function crud_edit() {
+	public function crud_edit(Closure $success = null) {
 		Assert::found($this->_crud_model);
 		$this->view->setVar('userData', $this->_crud_model->toArray());
 
-		return $this->crud_create($this->_crud_model);
+		return $this->crud_create($this->_crud_model, $success);
 	}
 
 }
