@@ -24,6 +24,7 @@ class Herald {
 					"Project-Key: "   . sha1(static::_config()['project'] . sha1(static::_config()['api_key'])),
 					""
 				]),
+			    'timeout' => 2,
 			]
 		]);
 
@@ -58,7 +59,8 @@ class Herald {
 				]),
 			    'method'  => 'POST',
 			    'content' => $payload,
-			]
+			    'timeout' => 2,
+			],
 		]);
 
 		$url = 'http://' . static::_host() . '/api01/' . static::_config()['project'] . '/mailing/queue';
@@ -83,6 +85,9 @@ class Herald {
 	/** @return bool */
 	public static function sendEmailMessage($subject, $to, $body) {
 		$typeList = static::getTypeList();
+
+		if (empty($typeList[0]))
+			return;
 
 		return static::queue([
 			'subject'         => $subject,

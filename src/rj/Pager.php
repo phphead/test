@@ -1,6 +1,8 @@
 <?php namespace Rj;
 
-use Phalcon\Mvc\Model,
+use Exception,
+	Phalcon\Mvc\Model,
+	Phalcon\Mvc\Model\Criteria,
 	Phalcon\Di;
 
 /**
@@ -41,12 +43,37 @@ class Pager {
 					'limit'  => $this->_onPage,
 					'offset' => $this->_page * $this->_onPage,
 				] + $this->_options);
+
+			$this->_loaded = true;
 		}
 	}
 
-	public function __construct(Model $model, array $options = []) {
-		$this->_model   = $model;
-		$this->_options = $options;
+	public function __construct($model, array $options = []) {
+		if ($model instanceof Model) {
+			$this->_model   = $model;
+			$this->_options = $options;
+
+		} else if ($model instanceof Criteria) {
+			$counter = $model->execute();
+
+			if (null === $this->_count)
+				$this->_count = call_user_func([ get_class($this->_model), 'count' ], $this->_options);
+
+			if (null === $this->_page)
+				$this->_page = static::getDI()['request']->get('page', 'uint', 0);
+
+			$this->_count     = count($counter);
+			$this->_pageCount = ceil($this->_count / $this->_onPage);
+			$this->_page      = max(0, min($this->_page, $this->_pageCount - 1));
+
+			$model->limit($this->onPage, $this->_page * $this->_onPage);
+			$this->_list = $model->execute();
+
+			$this->_loaded = true;
+
+		} else {
+			throw new Exception("Bad parameter");
+		}
 	}
 
 	public function __set($key, $value) {

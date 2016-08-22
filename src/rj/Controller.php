@@ -6,6 +6,9 @@ use Exception, Closure,
 	Phalcon\Validation\Message,
 	Phalcon\Mvc\Model as PhalconModel;
 
+/**
+ * @property TestView124 $view
+ */
 class Controller extends \Phalcon\Mvc\Controller {
 
 	public function initialize() {
