@@ -52,6 +52,7 @@ class Herald {
 			return [ $pock[1], $status ];
 
 		} else {
+			\Logger::messages()->error("ERROR IN " . $res);
 			throw new Exception("Unknown error");
 		}
 	}
