@@ -23,8 +23,8 @@ class SmsTraffic {
 		    'want_sms_ids' => 1,
 		    'phones'       => $number,
 		    'message'      => $text,
-		    'max_parts'    => 1,
-		    'rus'          => 1,
+		    'max_parts'    => 5,
+		    'rus'          => 5,
 		    'originator'   => empty($options['originator'])
 			    ? (empty($this->_params['originator']) ? '' : $this->_params['originator'])
 			    : $options['originator'],
