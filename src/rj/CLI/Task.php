@@ -13,7 +13,7 @@ class Task extends BaseTask {
 		echo date('Y-m-d H:i:s') . ' ' . $message . "\n";
 
 		if ($logger)
-			$logger->log($message, $type);
+			$logger->info($message, $type);
 	}
 
 	public function logException(Exception $e, $logger = null, $type = PhalconLogger::CRITICAL) {

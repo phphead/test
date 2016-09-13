@@ -2,7 +2,7 @@
 
 use Phalcon\Mvc\View;
 
-class TestView136 extends \Phalcon\Mvc\View
+class TestView134 extends View
 {
     public function noRender()
     {
@@ -14,7 +14,7 @@ class TestView136 extends \Phalcon\Mvc\View
         EngineSmarty124::getSmarty()->assign($k, $v);
     }
 
-    public function setVars($params, $merge=null)
+    public function setVars($params, $merge = NULL)
     {
         foreach ($params as $k => $v) {
             $this->setVar($k, $v);
@@ -40,7 +40,7 @@ class TestView136 extends \Phalcon\Mvc\View
         $this->_picked = $tpl;
     }
 
-    public function render($controllerName, $actionName, $params=null)
+    public function render($controllerName, $actionName, $params = NULL)
     {
         if ($this->_renderLevel !== View::LEVEL_NO_RENDER) {
             $this->_content = EngineSmarty124::getSmarty()->fetch($this->_picked ? $this->_picked . '.tpl' : ($this->namespace ? $this->namespace . '/' : '') . $controllerName . '/' . $actionName . '.tpl');
@@ -56,3 +56,5 @@ class TestView136 extends \Phalcon\Mvc\View
         return $this->_content;
     }
 }
+
+class TestView136 extends TestView134 {}

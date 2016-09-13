@@ -6,7 +6,7 @@ class MailerLog
 
     public $triggerError = '';
 
-    public function send($from, $to, $subject, $body)
+    public function send($from, $to, $subject, $body, $headers = '')
     {
         if (is_array($from) && count($from) == 2) {
             $from = $from[0] . ' <' . $from[1] . '>';
@@ -20,7 +20,7 @@ class MailerLog
             trigger_error($this->triggerError);
             $result = false;
         } else {
-			\Logger::instance(static::$_logger)->log("Message from '$from' to '$to' with subject '$subject' and content\n$body");
+			\Logger::instance(static::$_logger)->log("Message from '$from' to '$to' with subject '$subject', headers:$headers\n\n$body");
             $result = true;
         }
 

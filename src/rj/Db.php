@@ -15,6 +15,7 @@ class Db
 	 * @param $param2 Closure|null
 	 *
 	 * @throws Exception
+	 * @return mixed
 	 */
 	public static function transaction() {
 		switch (func_num_args()) {
@@ -35,13 +36,15 @@ class Db
 		/** @var $db       AdapterInterface */
 		/** @var $callback Closure          */
 
-		Assert::true($db instanceof AdapterInterface);
+		//Assert::true($db instanceof AdapterInterface);
 		Assert::true($callback instanceof Closure);
 
 		$db->begin();
 		try {
 			$ret = $callback($db);
 			$db->commit();
+
+			return $ret;
 
 		} catch (Exception $e) {
 			$db->rollback();
