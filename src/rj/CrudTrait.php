@@ -56,7 +56,7 @@ trait CrudTrait {
 					$this->crud_modelSave($model, $validation);
 				},
 				function () use ($success, $model) {
-					return $success($model) ?: $this->response->redirect([
+					return $success ? $success($model) : $this->response->redirect([
 						'for'        => $this->router->getMatchedRoute()->getName(),
 					    'controller' => $this->dispatcher->getControllerName(),
 					    'action'     => 'index',
