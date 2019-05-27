@@ -102,7 +102,7 @@ class Migration {
 		static::_writeMeta($new, $mg);
 	}
 
-	public static function run() {
+	public static function run($force = null) {
 		self::test();
 
 		list ($td, $mg) = static::_readMeta();
@@ -130,7 +130,17 @@ class Migration {
 
 				echo "Executing $entry...\n";
 
-				include "{$dir}$entry";
+				try {
+                    include "{$dir}$entry";
+
+                } catch (Exception $e) {
+				    if ($force) {
+				        echo $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
+
+                    } else {
+				        throw $e;
+                    }
+                }
 
 				$mg[] = $entry;
 				static::_writeMeta($td, $mg);
